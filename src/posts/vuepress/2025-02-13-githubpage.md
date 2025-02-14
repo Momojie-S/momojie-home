@@ -6,7 +6,7 @@ category:
 
 简单记录如何将 Vuepress 部署到 Github Page 上遇到的问题。
 
-<!--more-->
+<!-- more -->
 
 ## 整体流程
 
@@ -42,13 +42,10 @@ workflow的最后需要将build之后的结果推送到 gh-pages 分支，有可
 
 </details>
 
-<details>
 
-<summary>问题3 Github Page 域名</summary>
+### Github Page 域名
 
 参考 [官网](https://pages.github.com/)
 
 - 如果你的项目名称是 {user_name}.github.io (organization同样)则最终域名就是 {user_name}.github.io
 - 否则域名就是 {user_name}.github.io/{repo_name}
-
-</details>
