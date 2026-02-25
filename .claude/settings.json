@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm:*)",
+      "Bash(chromium:*)",
+      "mcp__chrome-devtools",
+      "Bash(git:*)"
+    ]
+  },
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true,
+    "chrome-devtools-mcp@chrome-devtools-plugins": true
+  }
+}

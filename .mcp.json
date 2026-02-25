@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "chrome-devtools-mcp@latest",
+        "-u",
+        "http://127.0.0.1:21101",
+        "--no-performance-crux",
+        "--no-usage-statistics"
+      ],
+      "env": {}
+    }
+  }
+}
