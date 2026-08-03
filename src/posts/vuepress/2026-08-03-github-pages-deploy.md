@@ -74,7 +74,7 @@ Source 设为 "GitHub Actions"（不是传统的 gh-pages 分支），更干净�
 
 `blog.momojie.online` 要指向 GitHub。两步：
 
-- **DNS**：阿里云把 `blog` 记录从 `A 120.78.153.43` 改成 `CNAME Momojie-S.github.io.`（末尾那个点别漏）。
+- **DNS**：阿里云把 `blog` 记录从 `A`（原服务器公网 IP）改成 `CNAME Momojie-S.github.io.`（末尾那个点别漏）。
 - **CNAME 文件**：repo 里放 `src/.vuepress/public/CNAME`，内容 `blog.momojie.online`。它会被 build 进产物根，GitHub 据此识别自定义域名，每次 deploy 自动保住绑定。
 
 另外把 `theme.ts` 的 `hostname` 改成 `https://blog.momojie.online`——theme-hope 用它生成 canonical URL 和 sitemap，不改会导致 SEO 指向错误域名。
