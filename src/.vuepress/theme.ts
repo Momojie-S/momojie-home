@@ -4,7 +4,7 @@ import navbar from "./navbar.js";
 import sidebar from "./sidebar.js";
 
 export default hopeTheme({
-  hostname: "https://momojie.online",
+  hostname: "https://blog.momojie.online",
 
   author: {
     name: "Momojie",
@@ -67,16 +67,6 @@ export default hopeTheme({
       //   icon: "https://theme-hope-assets.vuejs.press/logo.svg",
       //   link: "https://theme-hope.vuejs.press",
       // },
-    },
-  },
-
-  // 加密配置
-  encrypt: {
-    config: {
-      "/demo/encrypt.html": {
-        hint: "Password: 1234",
-        password: "1234",
-      },
     },
   },
 

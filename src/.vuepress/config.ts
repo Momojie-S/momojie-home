@@ -7,7 +7,7 @@ export default defineUserConfig({
 
   lang: "zh-CN",
   title: "莫隅小筑",
-  description: "vuepress-theme-hope 的博客演示",
+  description: "Momojie 的折腾笔记 · 运维 · 自动化 · 大模型",
 
   theme,
 
