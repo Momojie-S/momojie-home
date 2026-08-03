@@ -7,3 +7,6 @@ src/.vuepress/dist/
 
 # Claude 本地设置
 .claude/settings.local.json
+# commit trailer hook（个人本地）
+.claude/hooks/
+.debug/
