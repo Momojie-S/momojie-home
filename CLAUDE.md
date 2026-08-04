@@ -1,86 +1,85 @@
-# CLAUDE.md
+# momojie-home · 个人博客
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+> 莫隅小筑。线上 **https://blog.momojie.online**(VuePress 2 + theme-hope,GitHub Pages + 阿里云 CDN)。
+> 这是博客源码仓库:**写文章 → push main → GitHub Actions 自动 build → 几十秒后线上更新。**
 
-## Project Overview
+## 写文章
 
-This is a personal homepage/blog built with VuePress 2.x and the vuepress-theme-hope theme. The site is deployed at https://momojie.online and uses pnpm as the package manager.
+调 `/write-post`(或说"写一篇博文")走起草工作流。**写作方法论见下方「写作方法论」**——本文件是方法论的唯一事实源,skill 只做触发和工作流。
 
-## Commands
+## 发布
 
-```bash
-# Install dependencies
-pnpm install
+调 `/publish`(或说"发布/上线")走发布流程(脱敏 → 预览 → commit → push → 验证)。
 
-# Start development server
-pnpm docs:dev
+push `main` → `.github/workflows/deploy.yml` 自动 `pnpm docs:build` → 部署 Pages → blog.momojie.online 更新。
 
-# Start dev server with clean cache (use when having cache issues)
-pnpm docs:clean-dev
+## 写作方法论
 
-# Build for production
-pnpm docs:build
+> 写/改博文遵循。换电脑、重装照这个来,不靠记忆。
 
-# Update VuePress and theme packages
-pnpm docs:update-package
-```
+### 选题(值不值得写)
+同时满足两条:
+- **有过程**:真实踩坑 / debug / 选型决策(不是"查一下告诉你")
+- **有增量**:读者照着能少走弯路;官方文档已有的不算增量
 
-## Architecture
+### 三套结构模板(先定骨架)
+| 模板 | 适用 | 骨架 |
+|---|---|---|
+| 拆解型 | 工具/机制怎么工作 | 总览图 → 逐层拆 → 配置 → 权衡 → 速查表 |
+| 日记型 | debug 一个问题 | 现象 → 误区 → 根因 → 解法 → 验证 → 金句 |
+| 决策型 | 技术/方案选型 | 诊断 → 方案对比(带权衡)→ 实施 → 结果金句 |
 
-### Directory Structure
+### momojie-home 约定
+- 路径:`src/posts/<分类>/YYYY-MM-DD-slug.md`(分类即子目录)
+- frontmatter:`title` + `category`(数组)+ `date`
+- `<!-- more -->` 分摘要(列表页只显示摘要)
+- 中文、第一人称、口语化
 
-- `src/` - All source content
-  - `.vuepress/` - VuePress configuration
-    - `config.ts` - Main VuePress config (base, lang, title, description)
-    - `theme.ts` - Theme configuration (navbar, sidebar, blog settings, plugins)
-    - `navbar.ts` - Navigation bar configuration
-    - `sidebar.ts` - Sidebar configuration using `children: "structure"` for auto-generation
-    - `styles/` - Custom SCSS styles (palette.scss, config.scss, index.scss)
-    - `public/` - Static assets (favicon, logo, avatar)
-  - `posts/` - Blog posts organized by category (llm/, dev/, vuepress/)
-  - `index.md` - Homepage (BlogHome layout)
+### 质量自检(写完念一遍)
+- [ ] 一张总览图 / 心智模型(文章的魂)
+- [ ] 关键论点引官方/权威原文
+- [ ] 可执行的命令 / 配置(具体到值)
+- [ ] 第一人称 + 口语(有"我"的判断)
+- [ ] 结尾一句金句 / 观点
+- [ ] 脱敏(token / 私钥不进 git)
 
-### Key Configuration Files
+### 避坑
+- 别纯搬运官方文档(没增量)
+- 别通篇客观陈述、没"我"的判断(= AI 八股)
+- 别堆术语不解释
+- 别过长没重点(每节开头一句话点题)
 
-- **config.ts**: Base site config - language (zh-CN), title, base path
-- **theme.ts**: Theme settings including:
-  - Blog configuration with social media links
-  - Markdown extensions (GFM, code tabs, img lazyload, etc.)
-  - Plugin configuration (blog, components, icons)
-  - Icon prefix: `fa6-solid:` (Font Awesome 6 Solid)
+## 技术栈
 
-### Blog Post Format
+- VuePress 2 + vuepress-theme-hope,pnpm,Node ≥22(pnpm 11 硬要求)
+- ⚠️ pnpm 11 默认不跑依赖 build script;esbuild 已在 `pnpm-workspace.yaml` 的 `allowBuilds` 放行,**别删**
+- 本地预览:`pnpm docs:dev`(端口 **21102**)
+- 生产构建:`pnpm docs:build`(输出 `src/.vuepress/dist`)
+- 缓存问题:`pnpm docs:clean-dev`
+- 升级框架:`pnpm docs:update-package`
 
-Posts use YAML frontmatter:
-```yaml
----
-title: Post Title
-category:
-  - CategoryName
----
-```
+## 目录结构
 
-Use `<!-- more -->` to define the excerpt shown on the blog listing page.
+- `src/posts/<分类>/` — 文章,按分类建子目录(`vuepress/`、`claude-code/`、`llm/`、`dev/`…)
+- `src/.vuepress/`
+  - `config.ts` — 站点配置(base / lang / title / description)
+  - `theme.ts` — 主题(navbar / sidebar / blog / plugins,`hostname` = `https://blog.momojie.online`,用于 canonical/sitemap)
+  - `navbar.ts` / `sidebar.ts` — sidebar 用 `children: "structure"` 按文件系统自动生成
+  - `public/CNAME` — 内容 `blog.momojie.online`(GitHub 据此识别自定义域名)
+  - `styles/` — 自定义 SCSS(palette / config / index)
+- 更详细的架构和本地环境见 [README.md](README.md)
 
-### Sidebar Auto-Generation
+## 工具
 
-The sidebar uses `children: "structure"` to automatically generate navigation based on the file system structure in `src/posts/`.
+- **Bash 后台服务**:用工具原生 `run_in_background` 参数,别加 `nohup` 或后缀 `&`
+- **chrome-devtools-mcp**(调试博客页面):
+  1. `pnpm docs:dev` → http://localhost:21102
+  2. 启调试实例:`chromium --headless --remote-debugging-port=21101 --no-sandbox --disable-gpu --disable-software-rasterizer --disable-devm-usage >/dev/null 2>&1`
+  3. chrome-devtools MCP 连 21101 调试
 
-## 工具说明
+## 约定
 
-### Bash
-
-- 需要临时运行后台服务时，使用 Bash 工具原生的 `run_in_background` 参数，而不是在命令中增加 `nohup` 或者后缀 `&`
-
-### chrome-devtools-mcp
-
-用于调试和测试博客页面。使用前需先启动 Chrome 调试实例：
-
-```bash
-chromium --headless --remote-debugging-port=21101 --no-sandbox --disable-gpu --disable-software-rasterizer --disable-dev-shm-usage >/dev/null 2>&1
-```
-
-使用流程：
-1. 启动开发服务器：`pnpm docs:dev`（运行在 http://localhost:21102）
-2. 启动 Chrome 调试实例（端口 21101）
-3. 使用 chrome-devtools MCP 打开并调试博客页面
+- **公开 repo**。token / 私钥 / 个人凭据**绝不进 git**。文章里写配置示例要脱敏(域名/端口/模型名可写,密钥值不写)。
+- `.gitignore` 已排除:`.claude/settings.local.json`、`.claude/hooks/`、`.debug/`、`node_modules/`、`src/.vuepress/{.cache,.temp,dist}`
+- skills(`.claude/skills/`)**入库**(可重建、换电脑直接用);commit trailer hook(`.claude/hooks/`)是本地个人配置,不入库
+- commit message 用简短中文
