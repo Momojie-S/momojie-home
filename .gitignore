@@ -5,8 +5,12 @@ src/.vuepress/.cache/
 src/.vuepress/.temp/
 src/.vuepress/dist/
 
-# Claude 本地设置
-.claude/settings.local.json
-# commit trailer hook（个人本地）
-.claude/hooks/
+# AI agent 本地配置（DSH）
+# skills 源在 skills/（入库），junction 联入 .agents/skills 供 DSH 加载（本地 link 不入库）
+.agents/
+# Claude Code 已弃用，防残留
+.claude/
 .debug/
+
+# dsh workspace-env（本地凭据，绝不入库）
+.env

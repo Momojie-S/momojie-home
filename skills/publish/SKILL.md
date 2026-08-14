@@ -7,13 +7,13 @@ description: 发布博客文章到 blog.momojie.online。当用户说"发布""pu
 
 发布 = `push main` → GitHub Actions 自动 `pnpm docs:build` → 部署 Pages → blog.momojie.online 更新。整个发布只动 git,不碰服务器。
 
-> 所有命令在**项目根目录**(本仓库根)运行。CC 在本项目工作时 cwd 即项目根;若不在,先 cd 到仓库根,或用 `$CLAUDE_PROJECT_DIR`。
+> 所有命令在**项目根目录**(本仓库根)运行。DSH 会话 cwd 即项目根;若不在,先切到仓库根。
 
 ## ① 发布前检查(必做)
 
 **脱敏扫描**(公开 repo,泄露=永久):
-```bash
-git diff HEAD | grep -niE "ghp_[A-Za-z0-9]{36}|github_pat_|sk-ant-|BEGIN (RSA |EC |OPENSSH |ENCRYPTED )?PRIVATE KEY|BEGIN CERTIFICATE-----"
+```powershell
+git diff HEAD | Select-String -Pattern 'ghp_[A-Za-z0-9]{36}|github_pat_|sk-ant-|BEGIN (RSA |EC |OPENSSH |ENCRYPTED )?PRIVATE KEY|BEGIN CERTIFICATE-----'
 ```
 有命中 → 处理掉再发(无命中才继续)。
 
@@ -40,7 +40,7 @@ push 到 `main` 即触发 `.github/workflows/deploy.yml`(远程用仓库自带�
 
 ## ④ 验证
 
-1. **Actions 跑完**(几十秒):仓库 → Actions 标签页,绿了才算发布成功
+1. **Actions 跑完**(几十秒):仓库 → Actions 标签页,或 `gh run list --limit 1`,绿了才算发布成功
 2. **线上通**:`curl -sI https://blog.momojie.online` → 应 `200 OK`、`Server: Tengine`(阿里云 CDN)
 3. **新文章**:`https://blog.momojie.online/posts/<分类>/<slug>.html`
 

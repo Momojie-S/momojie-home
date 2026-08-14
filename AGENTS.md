@@ -5,17 +5,20 @@
 
 ## 写文章
 
-调 `/write-post`(或说"写一篇博文")走起草工作流。**写作方法论见下方「写作方法论」**——本文件是方法论的唯一事实源,skill 只做触发和工作流。
+说「写一篇博文」(或点名 `write-post` skill)走起草工作流。**写作方法论见下方「写作方法论」**——本文件是方法论的唯一事实源,skill 只做触发和工作流。
 
 ## 发布
 
-调 `/publish`(或说"发布/上线")走发布流程(脱敏 → 预览 → commit → push → 验证)。
+说「发布/上线」(或点名 `publish` skill)走发布流程(脱敏 → 预览 → commit → push → 验证)。
 
 push `main` → `.github/workflows/deploy.yml` 自动 `pnpm docs:build` → 部署 Pages → blog.momojie.online 更新。
 
 ## 写作方法论
 
 > 写/改博文遵循。换电脑、重装照这个来,不靠记忆。
+
+### 风格基调:低调谦虚
+技术判断可以坚定,但**不居高临下、不自夸权威**。不写"门儿清/精通/最懂"这种高调话,改"玩过一阵/略懂/有些了解";陈述事实(如"通关最高难度")可以,但不包装成"我是专家"。读者要的是干货 + 真实,不是自吹。
 
 ### 选题(值不值得写)
 同时满足两条:
@@ -61,6 +64,7 @@ push `main` → `.github/workflows/deploy.yml` 自动 `pnpm docs:build` → 部�
 ## 目录结构
 
 - `src/posts/<分类>/` — 文章,按分类建子目录(`vuepress/`、`claude-code/`、`llm/`、`dev/`…)
+- `skills/` — agent skills(`write-post`、`publish`),入库;本地经 junction 联入 `.agents/skills/` 供 DSH 加载(link 不入库)
 - `src/.vuepress/`
   - `config.ts` — 站点配置(base / lang / title / description)
   - `theme.ts` — 主题(navbar / sidebar / blog / plugins,`hostname` = `https://blog.momojie.online`,用于 canonical/sitemap)
@@ -71,15 +75,15 @@ push `main` → `.github/workflows/deploy.yml` 自动 `pnpm docs:build` → 部�
 
 ## 工具
 
-- **Bash 后台服务**:用工具原生 `run_in_background` 参数,别加 `nohup` 或后缀 `&`
+- **后台命令**:用工具原生 `run_in_background` 参数,别加 `nohup` 或后缀 `&`
 - **chrome-devtools-mcp**(调试博客页面):
   1. `pnpm docs:dev` → http://localhost:21102
   2. 启调试实例:`chromium --headless --remote-debugging-port=21101 --no-sandbox --disable-gpu --disable-software-rasterizer --disable-devm-usage >/dev/null 2>&1`
-  3. chrome-devtools MCP 连 21101 调试
+  3. chrome-devtools MCP 连 21101 调试(DSH 未配此 MCP;要用时按全局 `~/.dsh/AGENTS.md` 的模板加 patch)
 
 ## 约定
 
 - **公开 repo**。token / 私钥 / 个人凭据**绝不进 git**。文章里写配置示例要脱敏(域名/端口/模型名可写,密钥值不写)。
-- `.gitignore` 已排除:`.claude/settings.local.json`、`.claude/hooks/`、`.debug/`、`node_modules/`、`src/.vuepress/{.cache,.temp,dist}`
-- skills(`.claude/skills/`)**入库**(可重建、换电脑直接用);commit trailer hook(`.claude/hooks/`)是本地个人配置,不入库
+- `.gitignore` 已排除:`.agents/`(skill junction,本地 link)、`.env`(workspace-env 凭据)、`.debug/`、`.claude/`(CC 已弃用,防残留)、`node_modules/`、`src/.vuepress/{.cache,.temp,dist}`
+- skills(`skills/`)**入库**(可重建、换电脑直接用),本地 junction 联入 `.agents/skills/` 供 DSH 加载;CC 配置(`.claude/`、commit trailer hook)已随弃用移除
 - commit message 用简短中文
